@@ -3,11 +3,12 @@ import * as http from 'http';
 import express from 'express';
 
 require('dotenv').config();
+
 let app = require('./server').default();
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-const expressApp = express().use((req, res) => app.sever.handle(req, res));
+const expressApp = express().use((req, res) => app.server.handle(req, res));
 
 const server = http.createServer(expressApp);
 
