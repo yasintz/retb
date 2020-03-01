@@ -11,9 +11,9 @@
     "lint": "eslint './src/**/*.ts*' '**/__tests__/**/*.test.ts*' --cache",
     "prettier": "prettier  --ignore-path ./.prettierignore  **/*.ts*",
     "fix": "yarn prettier --write && yarn lint --fix",
-    "test": "razzle test --env=jsdom",
+    "test": "CI=true razzle test --env=jsdom",
     "coverage": "yarn test --coverage",
-    "check-rule": "yarn tsc && yarn lint && yarn prettier && yarn test",
+    "check-rules": "yarn tsc && yarn lint && yarn prettier && yarn test",
     "now-build": "yarn build",
     "now-start": "cross-env NODE_ENV=production yarn start"
   },
@@ -105,7 +105,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "yarn check-rule"
+      "pre-push": "yarn check-rules"
     }
   },
   "engines": {
