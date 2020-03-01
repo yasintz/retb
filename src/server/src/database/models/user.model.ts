@@ -3,7 +3,7 @@ import { Entity, Column, PrimaryColumn, BaseEntity } from 'typeorm';
 @Entity({
   name: 'user',
 })
-class UserTable extends BaseEntity {
+class UserModel extends BaseEntity {
   @PrimaryColumn()
   id: string;
 
@@ -14,4 +14,4 @@ class UserTable extends BaseEntity {
   password: string;
 }
 
-export default UserTable;
+export default UserModel;

@@ -1,19 +1,21 @@
+import _ from 'lodash';
 import { Route } from '@server/helpers';
 import { checkAuthBodyMiddleware } from '@server/middleware';
+import ServerContext from '@server/context';
+import { HTTP400Error } from '@server/helpers/http-errors';
 
 const registerRoute: Route = {
   method: 'post',
   path: '/register',
-  handler: [
+  handlers: [
     checkAuthBodyMiddleware,
     async (req, res, next) => {
-      res.json({ typ: 'register' });
-      // const hasUser = await serverContext.databaseContext.UserRepository.hasUsername(req.body.username);
-      // if (hasUser) {
-      //   throw new HTTP400Error('Username Daha once kayit edilmis');
-      // }
-      // const newUser = await db.User.save(req.body.username, req.body.password);
-      // res.send(lodash.omit(newUser, 'password'));
+      const hasUser = await ServerContext.DatabaseContext.UserService.hasUserByName(req.body.username);
+      if (hasUser) {
+        throw new HTTP400Error('Username Daha once kayit edilmis');
+      }
+      const newUser = await ServerContext.DatabaseContext.UserService.create(req.body.username, req.body.password);
+      res.send(_.omit(newUser, 'password'));
     },
   ],
 };

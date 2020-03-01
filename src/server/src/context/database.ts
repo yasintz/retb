@@ -1,11 +1,12 @@
-import UserRepository from '../database/repository/user';
+import UserService from '@server/services/database/user.service';
+import Repositories from '@server/database/repository';
 
 export interface DatabaseContext {
-  UserRepository: UserRepository;
+  UserService: UserService;
 }
 
 const databaseContext: DatabaseContext = {
-  UserRepository: new UserRepository(),
+  UserService: new UserService(Repositories.UserRepository),
 };
 
 export default databaseContext;

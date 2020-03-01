@@ -6,6 +6,7 @@
     "yarn.lock": true,
     ".eslintcache": true,
     "public": true,
-    "src": true
+    "src/server": true,
+    "src/client": true
   }
 }

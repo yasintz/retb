@@ -4,7 +4,7 @@ import html from './html';
 const clientRoute: Route = {
   path: '*',
   method: 'get',
-  handler: [
+  handlers: [
     async (req, res, next) => {
       try {
         res.send(await html({ req, res }));

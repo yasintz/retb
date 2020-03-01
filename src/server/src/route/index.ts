@@ -9,7 +9,7 @@ interface ServerProps {
 }
 
 export function applyRoutes(routes: Route[], router: express.Router): void {
-  routes.forEach(({ handler, method, path }) => {
+  routes.forEach(({ handlers: handler, method, path }) => {
     const handlers = handler.map(
       item => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {

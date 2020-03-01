@@ -1,7 +1,7 @@
-import UserTable from './user';
+import UserModel from './user.model';
 
-const models = {
-  UserTable,
+const Models = {
+  UserModel,
 };
 
-export default models;
+export default Models;

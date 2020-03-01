@@ -6,52 +6,84 @@ import passport from '@server/services/passport';
 import route from '@server/route';
 import applyErrorHandlers from '@server/middleware/error-handler';
 import initDatabase from '@server/database';
-import serverContext from '@server/context';
+import ServerContext from '@server/context';
+import { Connection } from 'typeorm';
 
-function app() {
-  console.log('Connecting Database'); // eslint-disable-line no-console
-  const database = initDatabase();
-  database.then(() => {
-    console.log('Connected Database'); // eslint-disable-line no-console
-  });
+const corsOptions: cors.CorsOptions = {
+  origin: (origin, callback) => {
+    callback(null, true);
+  },
+};
 
-  const server = express();
+class App {
+  express: express.Express;
 
-  const apiRouter = express.Router();
-  const publicRouter = express.Router();
+  database: Promise<Connection>;
 
-  const corsOptions: cors.CorsOptions = {
-    origin: (origin, callback) => {
-      callback(null, true);
-    },
+  private apiRouter: express.Router;
+
+  private publicRouter: express.Router;
+
+  constructor() {
+    this.createExpress();
+    this.connectToDatabase();
+    this.loadHandlers();
+    this.loadRouters();
+    this.applyRoutes();
+    this.applyErrorHandler();
+  }
+
+  private createExpress = () => {
+    this.express = express();
   };
 
-  server
-    .disable('x-powered-by')
-    // eslint-disable-next-line
-    .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
-    .use(express.json({ limit: '50mb' }))
-    .use(express.urlencoded({ limit: '50mb', extended: false }))
-    .use(cors(corsOptions))
-    .use(
-      session({ secret: serverContext.SECRET_KEY, cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }),
-    )
+  private connectToDatabase = () => {
+    console.log('Connecting Database'); // eslint-disable-line no-console
+    this.database = initDatabase();
+    this.database.then(() => {
+      console.log('Connected Database'); // eslint-disable-line no-console
+    });
+  };
 
-    .use(passport.initialize())
-    .use(passport.session())
-    .use(bodyParser.json());
+  private loadRouters = () => {
+    this.apiRouter = express.Router();
+    this.publicRouter = express.Router();
 
-  server.use('/api', apiRouter);
-  server.use('/', publicRouter);
+    this.express.use('/api', this.apiRouter);
+    this.express.use('/', this.publicRouter);
+  };
 
-  route({
-    apiRouter,
-    publicRouter,
-  });
+  private loadHandlers = () => {
+    this.express
+      .disable('x-powered-by')
+      // eslint-disable-next-line
+      .use(express.static(process.env.RAZZLE_PUBLIC_DIR!))
+      .use(express.json({ limit: '50mb' }))
+      .use(express.urlencoded({ limit: '50mb', extended: false }))
+      .use(cors(corsOptions))
+      .use(
+        session({
+          secret: ServerContext.SECRET_KEY,
+          cookie: { maxAge: 60000 },
+          resave: false,
+          saveUninitialized: false,
+        }),
+      )
+      .use(passport.initialize())
+      .use(passport.session())
+      .use(bodyParser.json());
+  };
 
-  applyErrorHandlers(server);
+  private applyRoutes = () => {
+    route({
+      apiRouter: this.apiRouter,
+      publicRouter: this.publicRouter,
+    });
+  };
 
-  return { server, database };
+  private applyErrorHandler = () => {
+    applyErrorHandlers(this.express);
+  };
 }
 
-export default app;
+export default new App();
