@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "razzle start",
     "build": "razzle build",
+    "postinstall": "yarn build",
     "start": "node build/server.js",
     "clean": "rm -rf build",
     "lint": "eslint './src/**/*.ts*' './test/**/*.test.ts*' --cache",
@@ -86,28 +87,13 @@
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.2"
   },
-  "jest": {
-    "transform": {
-      "\\.(ts|tsx)$": "ts-jest",
-      "\\.css$": "<rootDir>/node_modules/razzle/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|css|json)$)": "<rootDir>/node_modules/razzle/config/jest/fileTransform.js"
-    },
-    "testMatch": [
-      "<rootDir>/test/**/?(*.)(spec|test).(ts|js)?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "json"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
-    ]
-  },
   "husky": {
     "hooks": {
       "pre-push": "yarn check-rule"
     }
+  },
+  "engines": {
+    "node": ">=12.14.1",
+    "yarn": "^1.21.1"
   }
 }
