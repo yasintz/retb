@@ -19,8 +19,7 @@ const handleServerErrors = (router: Router) => {
     if (process.env.NODE_ENV !== 'development') {
       res.redirect('/error');
     } else {
-      res.redirect('/error');
-      // res.status(500).send(err.stack);
+      res.status(500).send(err.stack);
     }
   });
 };
