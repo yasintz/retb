@@ -21,7 +21,8 @@ module.exports = {
   modify: (config, { target, dev }, webpack) => {
     config = razzleHeroku(config, { target, dev }, webpack);
     config.resolve['alias'] = {
-      '~': path.resolve('./src'),
+      '@client': path.resolve('./src/client/src/'),
+      '@server': path.resolve('./src/server/src/'),
     };
     config.devtool = dev ? 'eval-source-map' : 'none';
 

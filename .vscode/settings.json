@@ -2,8 +2,10 @@
   "files.exclude": {
     "build": true,
     "coverage": true,
+    "now.json": true,
     "yarn.lock": true,
-    "*.log": true,
-    ".eslintcache": true
+    ".eslintcache": true,
+    "public": true,
+    "src": true
   }
 }

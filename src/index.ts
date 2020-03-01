@@ -4,7 +4,7 @@ import express from 'express';
 
 require('dotenv').config();
 
-let app = require('./server').default();
+let app = require('@server').default();
 
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
@@ -19,7 +19,7 @@ server.listen(port, () => {
 let status = app.database;
 
 if (module.hot) {
-  module.hot.accept(['./server'], () => {
+  module.hot.accept(['./server/src'], () => {
     console.log('🔁  HMR Reloading `./server`...');
     try {
       status = status.then((connection: any) => {
@@ -27,7 +27,7 @@ if (module.hot) {
 
         return connection.close().then(() => {
           console.log('Closed Database Connection');
-          app = require('./server').default();
+          app = require('@server').default();
 
           return app.database;
         });
