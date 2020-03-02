@@ -1,5 +1,5 @@
 import { Route } from '@server/helpers';
-import html from './html';
+import view from '@server/view';
 
 const clientRoute: Route = {
   path: '*',
@@ -7,7 +7,7 @@ const clientRoute: Route = {
   handlers: [
     async (req, res, next) => {
       try {
-        res.send(await html({ req, res }));
+        res.send(await view({ req, res }));
       } catch (error) {
         next(error);
       }

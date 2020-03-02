@@ -1,4 +1,4 @@
-import databaseContext, { DatabaseContext } from './database';
+import DatabaseContext from './database.context';
 
 export interface ServerContextType {
   DatabaseContext: DatabaseContext;
@@ -6,7 +6,7 @@ export interface ServerContextType {
 }
 
 const ServerContext: ServerContextType = {
-  DatabaseContext: databaseContext,
+  DatabaseContext: new DatabaseContext(),
   SECRET_KEY: process.env.SECRET_KEY as string,
 };
 

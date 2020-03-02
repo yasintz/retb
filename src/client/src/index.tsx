@@ -3,10 +3,12 @@ import React from 'react';
 import routes from '@client/pages';
 import { After } from '@jaredpalmer/after';
 
-const Client: React.FC<{ data: any }> = ({ data }) => (
-  <BrowserRouter>
-    <After data={data} routes={routes} />
-  </BrowserRouter>
-);
+const Client: React.FC<{ data: any }> = ({ data }) => {
+  return (
+    <BrowserRouter>
+      <After data={data} routes={routes} />
+    </BrowserRouter>
+  );
+};
 
 export default Client;

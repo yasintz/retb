@@ -1,10 +1,20 @@
+/* eslint-disable jsx-a11y/html-has-lang */
 import React from 'react';
-import { PageComponent } from '..';
+import Helmet from 'react-helmet';
+import styled from 'styled-components';
 
-const ServerError: PageComponent = props => {
-  // console.log(props);
+interface ServerErrorProps {}
+const StyledTitle = styled.h1`
+  color: red;
+`;
 
-  return <h2>Server Error</h2>;
+const ServerError: React.FC<ServerErrorProps> = props => {
+  return (
+    <div>
+      <Helmet title="Hello world" />
+      <StyledTitle>Server Error</StyledTitle>
+    </div>
+  );
 };
 
 export default ServerError;

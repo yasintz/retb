@@ -10,7 +10,7 @@ const About: PageComponent<AboutProps> = props => {
 };
 
 About.getInitialProps = async () => {
-  return { yasin: 'hello' };
+  throw new Error('About Test Error');
 };
 
 export default About;

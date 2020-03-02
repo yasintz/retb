@@ -1,4 +1,4 @@
-/* eslint-disable no-console,global-require */
+/* eslint-disable no-console,global-require,@typescript-eslint/no-var-requires */
 import * as http from 'http';
 import express from 'express';
 
@@ -16,26 +16,27 @@ server.listen(port, () => {
   console.log(`> Started on port ${port}`);
 });
 
-let status = app.database;
+if (process.env.NODE_ENV === 'development') {
+  let status = app.database;
+  if (module.hot) {
+    module.hot.accept(['./server/src'], () => {
+      console.log('🔁  HMR Reloading `./server`...');
+      try {
+        status = status.then((connection: any) => {
+          console.log('Closing Database Connection');
 
-if (module.hot) {
-  module.hot.accept(['./server/src'], () => {
-    console.log('🔁  HMR Reloading `./server`...');
-    try {
-      status = status.then((connection: any) => {
-        console.log('Closing Database Connection');
+          return connection.close().then(() => {
+            console.log('Closed Database Connection');
+            app = require('@server').default;
 
-        return connection.close().then(() => {
-          console.log('Closed Database Connection');
-          app = require('@server').default;
-
-          return app.database;
+            return app.database;
+          });
         });
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  });
+      } catch (error) {
+        console.error(error);
+      }
+    });
 
-  console.info('✅  Server-side HMR Enabled!');
+    console.info('✅  Server-side HMR Enabled!');
+  }
 }

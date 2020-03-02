@@ -3,19 +3,19 @@ import { AfterRoot, AfterStyles, AfterScripts, AfterData, DocumentProps } from '
 
 import { ServerStyleSheet } from 'styled-components';
 
-export default class Document extends React.Component<DocumentProps & { styleTags: any }> {
-  static async getInitialProps({ data, assets, renderPage }: any) {
+export default class Document extends React.Component<DocumentProps & { styleTags: any; hasServerError: any }> {
+  static async getInitialProps({ assets, renderPage, hasServerError }: any) {
     const sheet = new ServerStyleSheet();
 
     const page = await renderPage((App: any) => (props: any) => sheet.collectStyles(<App {...props} />));
 
     const styleTags = sheet.getStyleElement();
 
-    return { assets, data, ...page, styleTags };
+    return { assets, ...page, styleTags, hasServerError };
   }
 
   render() {
-    const { helmet, styleTags } = this.props;
+    const { helmet, styleTags, hasServerError } = this.props;
     // get attributes from React Helmet
     const htmlAttrs = helmet.htmlAttributes.toComponent();
     const bodyAttrs = helmet.bodyAttributes.toComponent();
@@ -36,7 +36,7 @@ export default class Document extends React.Component<DocumentProps & { styleTag
         </head>
         <body {...bodyAttrs}>
           <AfterRoot />
-          <AfterData />
+          <AfterData data={{ hasServerError }} />
           <AfterScripts />
         </body>
       </html>

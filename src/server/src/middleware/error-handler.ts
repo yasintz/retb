@@ -1,5 +1,6 @@
 /* eslint-disable no-console,global-require */
 import { Request, Response, NextFunction, Router, Express } from 'express';
+import get500Html from '@server/view/500';
 import { HTTPClientError } from '../helpers/http-errors';
 
 const handleClientErrors = (router: Router) => {
@@ -14,12 +15,14 @@ const handleClientErrors = (router: Router) => {
 };
 
 const handleServerErrors = (router: Router) => {
-  router.use(async (err: Error, req: Request, res: Response, next: NextFunction) => {
-    console.error(`Server Error : ${err}`);
+  router.use(async (error: Error, req: Request, res: Response, next: NextFunction) => {
+    console.error(`Server Error : ${error}`);
+
     if (process.env.NODE_ENV !== 'development') {
-      res.redirect('/error');
+      res.send(get500Html());
     } else {
-      res.status(500).send(err.stack);
+      res.send(get500Html());
+      // res.status(500).send(err.stack);
     }
   });
 };

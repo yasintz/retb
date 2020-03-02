@@ -29,11 +29,6 @@ const routes: Page[] = [
     component: asyncComponent({ loader: () => import('./about'), Placeholder: Loading }),
   },
   {
-    path: '/error',
-    exact: true,
-    component: asyncComponent({ loader: () => import('./server-error'), Placeholder: Loading }),
-  },
-  {
     component: NotFound,
   },
 ];

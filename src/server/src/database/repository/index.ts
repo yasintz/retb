@@ -1,8 +1,12 @@
 import UserRepository from './user.repository';
-import Models from '../models';
+import { ModelsType } from '../models';
 
-const Repositories = {
-  UserRepository: new UserRepository(Models.UserModel),
-};
+class Repository {
+  readonly UserRepository: UserRepository;
 
-export default Repositories;
+  constructor(models: ModelsType) {
+    this.UserRepository = new UserRepository(models.UserModel);
+  }
+}
+
+export default Repository;

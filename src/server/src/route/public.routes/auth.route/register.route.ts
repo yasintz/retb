@@ -10,11 +10,12 @@ const registerRoute: Route = {
   handlers: [
     checkAuthBodyMiddleware,
     async (req, res, next) => {
-      const hasUser = await ServerContext.DatabaseContext.UserService.hasUserByName(req.body.username);
+      const { UserService } = ServerContext.DatabaseContext.Services;
+      const hasUser = await UserService.hasUserByName(req.body.username);
       if (hasUser) {
         throw new HTTP400Error('Username Daha once kayit edilmis');
       }
-      const newUser = await ServerContext.DatabaseContext.UserService.create(req.body.username, req.body.password);
+      const newUser = await UserService.create(req.body.username, req.body.password);
       res.send(_.omit(newUser, 'password'));
     },
   ],
