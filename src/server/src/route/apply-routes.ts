@@ -14,7 +14,7 @@ function applyRoutes(route: Route, router: express.Router): void {
     const handlers = route.handlers ? (Array.isArray(route.handlers) ? route.handlers : [route.handlers]) : [];
     let newRouter = router;
     const path = route.path ? route.path : '/';
-    if (handlers.length || path !== '/') {
+    if (handlers.length || (path && path !== '/')) {
       newRouter = express.Router();
       router.use(path, ...handlers, newRouter);
     }

@@ -24,10 +24,19 @@ function logRoutes(main: any, parentId: string): void {
   if (last) {
     if (last.id === parentId) {
       const current: RR = { parentId, id, childs: [], path: main.path };
-      last.childs.push(current);
       if (main.routes) {
         lasts.push(current);
-        main.routes.forEach((element: any) => logRoutes(element, current.id));
+        let prId = current.id;
+        if (main.path && main.path !== '/') {
+          last.childs.push(current);
+        } else {
+          prId = parentId;
+        }
+        main.routes.forEach((element: any) => {
+          logRoutes(element, prId);
+        });
+      } else {
+        last.childs.push(current);
       }
     } else {
       lasts.pop();
@@ -35,8 +44,20 @@ function logRoutes(main: any, parentId: string): void {
     }
   } else {
     lasts.push({ id: parentId, parentId: '', childs: [] });
-    main.routes.forEach((element: any) => logRoutes(element, parentId));
+    main.routes.forEach((element: any) => {
+      logRoutes(element, parentId);
+    });
   }
+}
+function g(m: RR) {
+  delete m.id;
+  delete m.parentId;
+  // @ts-ignore
+  m.childs = m.childs.map(g);
+  if (!m.childs.length) {
+    delete m.childs;
+  }
+  return m;
 }
 
 export default (server: express.Router) => {
@@ -44,7 +65,7 @@ export default (server: express.Router) => {
     process.nextTick(() => {
       lasts.length = 0;
       logRoutes(serverRoute, 'server');
-      require('fs').writeFileSync('./oo.json')
+      require('fs').writeFileSync('./oo.json', JSON.stringify(g(lasts[0]).childs, null, 4));
     });
     next();
   };
