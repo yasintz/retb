@@ -2,12 +2,13 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import session from 'express-session';
 import express from 'express';
-import passport from '@server/services/passport';
+import passport from 'passport';
 import route from '@server/route';
 import applyErrorHandlers from '@server/middleware/error-handler';
 import initDatabase from '@server/database';
 import ServerContext from '@server/context';
 import { Connection } from 'typeorm';
+import configurePassport from './utils/passport.configure';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -20,15 +21,10 @@ class App {
 
   database: Promise<Connection>;
 
-  private apiRouter: express.Router;
-
-  private publicRouter: express.Router;
-
   constructor() {
     this.createExpress();
     this.connectToDatabase();
-    this.loadHandlers();
-    this.loadRouters();
+    this.loadExpressConfiguration();
     this.applyRoutes();
     this.applyErrorHandler();
   }
@@ -45,15 +41,8 @@ class App {
     });
   };
 
-  private loadRouters = () => {
-    this.apiRouter = express.Router();
-    this.publicRouter = express.Router();
-
-    this.express.use('/api', this.apiRouter);
-    this.express.use('/', this.publicRouter);
-  };
-
-  private loadHandlers = () => {
+  private loadExpressConfiguration = () => {
+    configurePassport(passport);
     this.express
       .disable('x-powered-by')
       // eslint-disable-next-line
@@ -63,7 +52,7 @@ class App {
       .use(cors(corsOptions))
       .use(
         session({
-          secret: ServerContext.SECRET_KEY,
+          secret: ServerContext.SESSION_SECRET_KEY,
           cookie: { maxAge: 60000 },
           resave: false,
           saveUninitialized: false,
@@ -75,10 +64,7 @@ class App {
   };
 
   private applyRoutes = () => {
-    route({
-      apiRouter: this.apiRouter,
-      publicRouter: this.publicRouter,
-    });
+    route(this.express);
   };
 
   private applyErrorHandler = () => {

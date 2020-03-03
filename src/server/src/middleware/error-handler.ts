@@ -19,9 +19,9 @@ const handleServerErrors = (router: Router) => {
     console.error(`Server Error : ${error}`);
 
     if (process.env.NODE_ENV !== 'development') {
-      res.send(get500Html());
+      res.status(500).send(get500Html());
     } else {
-      res.send(get500Html());
+      res.status(500).send(get500Html());
       // res.status(500).send(err.stack);
     }
   });

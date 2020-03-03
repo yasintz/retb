@@ -16,6 +16,8 @@ const Button = styled.button`
 `;
 
 const App: PageComponent<AppProps> = props => {
+  console.log(props);
+
   return (
     <div>
       <div>
@@ -23,6 +25,11 @@ const App: PageComponent<AppProps> = props => {
       </div>
     </div>
   );
+};
+
+App.getInitialProps = ({ req }) => {
+  // @ts-ignore
+  return { user: req?.user };
 };
 
 export default App;

@@ -8,11 +8,19 @@ export type Handler<Req = {}, Res = {}> = (
 
 export type Middleware<Req = {}, Res = {}> = Handler<Req, Res>;
 
-export type Route<Req = {}, Res = {}> = {
-  path: string | string[];
-  method: 'get' | 'post' | 'put';
-  handlers: Handler<Req, Res>[];
+export type ParentRoute<Req = {}, Res = {}> = {
+  path?: string | string[];
+  handlers?: Handler<Req, Res>[] | Handler<Req, Res>;
+  routes: Route<Req, Res>[];
 };
+
+export type ChildRoute<Req = {}, Res = {}> = {
+  path: string | string[];
+  method: 'get' | 'post' | 'put' | 'delete';
+  handlers: Handler<Req, Res>[] | Handler<Req, Res>;
+};
+
+export type Route<Req = {}, Res = {}> = ChildRoute<Req, Res> | ParentRoute<Req, Res>;
 
 export class Service<R> {
   protected Repository: R;
