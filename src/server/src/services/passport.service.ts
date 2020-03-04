@@ -66,7 +66,7 @@ class PassportService {
 
             return;
           }
-          done(new HTTP400Error('Missing Token'));
+          done(new HTTP400Error('An error occured'));
         });
       },
     );

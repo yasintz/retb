@@ -32,6 +32,21 @@ const App: PageComponent<AppProps> = props => {
           logout
         </Button>
       </div>
+      <button
+        type="button"
+        onClick={() => {
+          axios
+            .get('/api/test')
+            .then(({ data }) => {
+              console.log({ data });
+            })
+            .catch(err => {
+              console.log(err);
+            });
+        }}
+      >
+        Getir
+      </button>
       <div>
         <a href="/auth/login/google"> Login With Google</a>
       </div>

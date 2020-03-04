@@ -1,9 +1,23 @@
 import { Middleware } from '@server/helpers';
+import passport from 'passport';
 import { HTTP400Error, HTTP401Error } from '@server/helpers/http-errors';
 
 const authenticationMiddleware: Middleware = (req, res, next) => {
   if (!req.isAuthenticated()) {
-    throw new HTTP401Error('You Must Loggin');
+    passport.authenticate('jwt', { session: false }, (error, user) => {
+      if (error) {
+        next(error);
+
+        return;
+      }
+      if (!user) {
+        throw new HTTP401Error('Invalid Token');
+      }
+
+      next();
+    })(req, res, next);
+
+    return;
   }
 
   next();

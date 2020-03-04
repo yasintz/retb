@@ -3,39 +3,47 @@ import axios from 'axios';
 import { PageComponent } from '..';
 
 interface LoginPageProps {
-  user?: { username: string; id: string };
+  user?: { username: string; id: string; token: string };
 }
 const Login: PageComponent<LoginPageProps> = props => {
-  const [user, setUser] = React.useState(props.user ? props.user : { username: 'yok la' });
+  const [user, setUser] = React.useState(props.user ? props.user : { username: 'yok la', token: '' });
+  const buttons = [
+    {
+      text: 'Login',
+      onClick: () => {
+        axios.post('/auth/login', { username: 'yasintz', password: '12345' }).then(i => {
+          setUser(i.data);
+          console.log(i.data);
+        });
+      },
+    },
+    {
+      text: 'Logout',
+      onClick: () => axios.post('/auth/logout'),
+    },
+    {
+      text: 'With Token',
+      onClick: () => {
+        axios.get('/api/test', { headers: { Authorization: user.token } });
+      },
+    },
+    {
+      text: 'Without Token',
+      onClick: () => {
+        axios.get('/api/test');
+      },
+    },
+  ];
 
   return (
     <>
       <div>{user.username}</div>
       <div>
-        <label>Username:</label>
-        <input type="text" name="username" />
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" name="password" />
-      </div>
-      <div>
-        <button
-          onClick={() => {
-            axios
-              .post('/auth/login', { username: 'yasintz', password: '12345' })
-              .then(i => {
-                setUser({ username: i.data.username });
-                console.log(i.data);
-              })
-              .catch(e => {
-                alert(e);
-              });
-          }}
-          type="button"
-        >
-          Login
-        </button>
+        {buttons.map(item => (
+          <button onClick={item.onClick} type="button" key={item.text}>
+            {item.text}
+          </button>
+        ))}
       </div>
     </>
   );
