@@ -13,6 +13,9 @@ class UserModel extends BaseEntity {
   @Column({ unique: true, nullable: true })
   googleId: string;
 
+  @Column({ unique: true, nullable: true })
+  githubId: string;
+
   @Column({ nullable: true })
   password: string;
 }

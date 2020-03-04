@@ -1,8 +1,11 @@
 import to from 'await-to-js';
-import { Strategy as LocalStrategy } from 'passport-local';
 import passport from 'passport';
+
+import { Strategy as LocalStrategy } from 'passport-local';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import { Strategy as GithubStrategy } from 'passport-github';
+
 import ServerContext from '@server/context';
 import { HTTP400Error, HTTP404Error } from '@server/helpers/http-errors';
 import UserModel from '@server/database/models/user.model';
@@ -10,26 +13,24 @@ import UserModel from '@server/database/models/user.model';
 class PassportService {
   private _localStrategy: LocalStrategy;
 
-  private _jswStrategy: JwtStrategy;
+  private _jwtStrategy: JwtStrategy;
 
   private _googleStrategy: GoogleStrategy;
 
-  get LocalStrategy(): LocalStrategy {
-    return this._localStrategy;
-  }
+  private _githubStrategy: GithubStrategy;
 
-  get JwtStrategy(): JwtStrategy {
-    return this._jswStrategy;
-  }
-
-  get GoogleStrategy(): GoogleStrategy {
-    return this._googleStrategy;
-  }
+  public useAll = () => {
+    passport.use(this._localStrategy);
+    passport.use(this._jwtStrategy);
+    passport.use(this._googleStrategy);
+    passport.use(this._githubStrategy);
+  };
 
   constructor() {
     this.createLocalStrategy();
     this.createJwtStrategy();
     this.createGoogleStrategy();
+    this.createGithubStrategy();
     this.serializeUser();
     this.desrializeUser();
   }
@@ -55,7 +56,7 @@ class PassportService {
   }
 
   private createJwtStrategy = () => {
-    this._jswStrategy = new JwtStrategy(
+    this._jwtStrategy = new JwtStrategy(
       { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: ServerContext.TOKEN_SECRET_KEY },
       (jwtPayload, done) => {
         process.nextTick(async () => {
@@ -117,6 +118,19 @@ class PassportService {
             done(error, false);
           }
         });
+      },
+    );
+  };
+
+  private createGithubStrategy = () => {
+    this._githubStrategy = new GithubStrategy(
+      {
+        clientID: ServerContext.GITHUB_CLIENT_ID,
+        clientSecret: ServerContext.GITHUB_CLIENT_SECRET,
+        callbackURL: `${ServerContext.SERVER_URL}/auth/login/github/callback`,
+      },
+      (accessToken, refreshToken, profile, done) => {
+        done(null, { accessToken, refreshToken, profile, id: 'dcbc888b-1983-4cb6-8030-c369fccd6456' });
       },
     );
   };

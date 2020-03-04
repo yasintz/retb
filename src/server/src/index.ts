@@ -8,7 +8,7 @@ import applyErrorHandlers from '@server/middleware/error-handler';
 import initDatabase from '@server/database';
 import ServerContext from '@server/context';
 import { Connection } from 'typeorm';
-import configurePassport from './utils/passport.configure';
+import passportService from './services/passport.service';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -24,7 +24,7 @@ class App {
   constructor() {
     this.createExpress();
     this.connectToDatabase();
-    configurePassport(passport);
+    passportService.useAll();
     this.loadExpressConfiguration();
     this.applyRoutes();
     this.applyErrorHandler();
