@@ -1,19 +1,30 @@
 import { Route } from '@server/helpers';
 import passport from 'passport';
+import { createToken } from '@server/utils/token.util';
+import UserModel from '@server/database/models/user.model';
 
 const googleRoute: Route = {
   routes: [
     {
-      path: '/login/google',
+      path: '/google',
       method: 'get',
       handlers: passport.authenticate('google', {
-        scope: ['profile'],
+        scope: ['profile', 'email'],
       }),
     },
     {
-      path: '/login/google/callback',
+      path: '/google/callback',
       method: 'get',
-      handlers: passport.authenticate('google', { failureRedirect: '/login', successRedirect: '/' }),
+      handlers: [
+        passport.authenticate('google', { failureRedirect: '/login' }),
+        (req, res) => {
+          // const user = req.user as UserModel;
+
+          // req.user = { id: user.id, token: createToken(user.id, '1 day'), username: user.username };
+
+          res.status(200).redirect('/');
+        },
+      ],
     },
   ],
 };

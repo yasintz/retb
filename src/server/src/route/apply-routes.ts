@@ -29,7 +29,7 @@ function applyRoutes(route: Route, router: express.Router): void {
     const handlers = handlerArray.map(
       item => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
-          item(req, res, next);
+          await item(req, res, next);
         } catch (error) {
           next(error);
         }

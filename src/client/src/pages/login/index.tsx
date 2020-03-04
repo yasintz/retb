@@ -1,9 +1,16 @@
 import React from 'react';
+import axios from 'axios';
 import { PageComponent } from '..';
 
-const Login: PageComponent = () => {
+interface LoginPageProps {
+  user?: { username: string; id: string };
+}
+const Login: PageComponent<LoginPageProps> = props => {
+  const [user, setUser] = React.useState(props.user ? props.user : { username: 'yok la' });
+
   return (
-    <form action="/login" method="post">
+    <>
+      <div>{user.username}</div>
       <div>
         <label>Username:</label>
         <input type="text" name="username" />
@@ -13,10 +20,29 @@ const Login: PageComponent = () => {
         <input type="password" name="password" />
       </div>
       <div>
-        <input type="submit" value="Log In" />
+        <button
+          onClick={() => {
+            axios
+              .post('/auth/login', { username: 'yasintz', password: '12345' })
+              .then(i => {
+                setUser({ username: i.data.username });
+                console.log(i.data);
+              })
+              .catch(e => {
+                alert(e);
+              });
+          }}
+          type="button"
+        >
+          Login
+        </button>
       </div>
-    </form>
+    </>
   );
+};
+Login.getInitialProps = ({ req }) => {
+  // @ts-ignore
+  return { user: req?.user };
 };
 
 export default Login;

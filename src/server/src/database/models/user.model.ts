@@ -4,13 +4,16 @@ import { Entity, Column, PrimaryColumn, BaseEntity } from 'typeorm';
   name: 'user',
 })
 class UserModel extends BaseEntity {
-  @PrimaryColumn()
+  @PrimaryColumn({ nullable: false })
   id: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, nullable: false })
   username: string;
 
-  @Column()
+  @Column({ unique: true, nullable: true })
+  googleId: string;
+
+  @Column({ nullable: true })
   password: string;
 }
 

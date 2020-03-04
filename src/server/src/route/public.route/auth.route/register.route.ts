@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { Route } from '@server/helpers';
 import { checkAuthBodyMiddleware } from '@server/middleware';
 import ServerContext from '@server/context';
@@ -16,7 +15,7 @@ const registerRoute: Route = {
         throw new HTTP400Error('Username Daha once kayit edilmis');
       }
       const newUser = await UserService.create(req.body.username, req.body.password);
-      res.send(_.omit(newUser, 'password'));
+      res.json({ username: newUser.username, id: newUser.id });
     },
   ],
 };

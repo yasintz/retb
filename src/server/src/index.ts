@@ -24,6 +24,7 @@ class App {
   constructor() {
     this.createExpress();
     this.connectToDatabase();
+    configurePassport(passport);
     this.loadExpressConfiguration();
     this.applyRoutes();
     this.applyErrorHandler();
@@ -42,7 +43,6 @@ class App {
   };
 
   private loadExpressConfiguration = () => {
-    configurePassport(passport);
     this.express
       .disable('x-powered-by')
       // eslint-disable-next-line

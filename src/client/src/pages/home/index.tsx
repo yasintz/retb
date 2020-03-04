@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 import { PageComponent } from '..';
 
@@ -21,7 +22,18 @@ const App: PageComponent<AppProps> = props => {
   return (
     <div>
       <div>
-        <Button>This is Emotion</Button>
+        <Button
+          onClick={() => {
+            axios.post('/auth/logout').then(({ data }) => {
+              console.log(data);
+            });
+          }}
+        >
+          logout
+        </Button>
+      </div>
+      <div>
+        <a href="/auth/login/google"> Login With Google</a>
       </div>
     </div>
   );
