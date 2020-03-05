@@ -1,26 +1,23 @@
 import * as express from 'express';
 
-export type Handler<Req = {}, Res = {}> = (
-  req: express.Request & Req,
-  res: express.Response & Res,
-  next: express.NextFunction,
-) => Promise<any> | any;
+export type Handler = (req: express.Request, res: express.Response, next: express.NextFunction) => Promise<any> | any;
 
-export type Middleware<Req = {}, Res = {}> = Handler<Req, Res>;
+export type Middleware = Handler;
 
-export type ParentRoute<Req = {}, Res = {}> = {
+export type ParentRoute = {
   path?: string | string[];
-  handlers?: Handler<Req, Res>[] | Handler<Req, Res>;
-  routes: Route<Req, Res>[];
+  middlewares?: Middleware[];
+  routes: Route[];
 };
 
-export type ChildRoute<Req = {}, Res = {}> = {
+export type ChildRoute = {
   path: string | string[];
   method: 'get' | 'post' | 'put' | 'delete';
-  handlers: Handler<Req, Res>[] | Handler<Req, Res>;
+  middlewares?: Middleware[];
+  handler: Handler;
 };
 
-export type Route<Req = {}, Res = {}> = ChildRoute<Req, Res> | ParentRoute<Req, Res>;
+export type Route = ChildRoute | ParentRoute;
 
 export class Service<R> {
   protected Repository: R;

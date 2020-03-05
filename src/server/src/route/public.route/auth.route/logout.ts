@@ -3,7 +3,7 @@ import { Route } from '@server/helpers';
 const logoutRoute: Route = {
   method: 'post',
   path: '/logout',
-  handlers: (req, res) => {
+  handler: (req, res) => {
     req.logOut();
     res.send({ logout: true });
   },

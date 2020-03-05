@@ -6,17 +6,16 @@ const githubRoute: Route = {
     {
       path: '/github',
       method: 'get',
-      handlers: passport.authenticate('github', { scope: ['profile', 'email', 'username'] }),
+      handler: passport.authenticate('github', { scope: ['profile', 'email', 'username'] }),
     },
     {
       path: '/github/callback',
       method: 'get',
-      handlers: [
-        passport.authenticate('github', { failureRedirect: '/login' }),
-        (req, res) => {
-          res.redirect('/');
-        },
-      ],
+      middlewares: [passport.authenticate('github', { failureRedirect: '/login' })],
+
+      handler: (req, res) => {
+        res.redirect('/');
+      },
     },
   ],
 };

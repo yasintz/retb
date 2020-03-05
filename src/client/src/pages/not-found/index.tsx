@@ -5,4 +5,10 @@ const NotFound: PageComponent = () => {
   return <h2>404 </h2>;
 };
 
+NotFound.getInitialProps = ({ req, res }) => {
+  console.log({ req, res });
+
+  return {};
+};
+
 export default NotFound;

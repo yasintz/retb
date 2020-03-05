@@ -6,17 +6,17 @@ function isParent(route: any): route is ParentRoute {
 }
 
 function isChild(route: any): route is ChildRoute {
-  return route.method && route.handlers && route.path;
+  return route.method && route.handler && route.path;
 }
 
 function applyRoutes(route: Route, router: express.Router): void {
   if (isParent(route)) {
-    const handlers = route.handlers ? (Array.isArray(route.handlers) ? route.handlers : [route.handlers]) : [];
     let newRouter = router;
     const path = route.path ? route.path : '/';
-    if (handlers.length || (path && path !== '/')) {
+    const middlewares = route.middlewares ? route.middlewares : [];
+    if ((middlewares && middlewares.length) || (path && path !== '/')) {
       newRouter = express.Router();
-      router.use(path, ...handlers, newRouter);
+      router.use(path, ...middlewares, newRouter);
     }
 
     route.routes.forEach(childRote => applyRoutes(childRote, newRouter));
@@ -24,8 +24,8 @@ function applyRoutes(route: Route, router: express.Router): void {
     return;
   }
   if (isChild(route)) {
-    const { handlers: handler, method, path } = route;
-    const handlerArray = Array.isArray(handler) ? handler : [handler];
+    const { handler, method, path, middlewares } = route;
+    const handlerArray = Array.isArray(middlewares) ? [...middlewares, handler] : [handler];
     const handlers = handlerArray.map(
       item => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {

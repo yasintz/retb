@@ -6,17 +6,15 @@ import testRoute from './test.route';
 const notFoundError: Route = {
   path: '*',
   method: 'get',
-  handlers: [
-    (req, res) => {
-      throw new HTTP404Error('Not Found');
-    },
-  ],
+  handler: (req, res) => {
+    throw new HTTP404Error('Not Found');
+  },
 };
 
 const apiRoute: Route = {
   path: '/api',
   routes: [testRoute, notFoundError],
-  handlers: authenticationMiddleware,
+  middlewares: [authenticationMiddleware],
 };
 
 export default apiRoute;

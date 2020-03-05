@@ -8,23 +8,21 @@ const googleRoute: Route = {
     {
       path: '/google',
       method: 'get',
-      handlers: passport.authenticate('google', {
+      handler: passport.authenticate('google', {
         scope: ['profile', 'email'],
       }),
     },
     {
       path: '/google/callback',
       method: 'get',
-      handlers: [
-        passport.authenticate('google', { failureRedirect: '/login' }),
-        (req, res) => {
-          // const user = req.user as UserModel;
+      middlewares: [passport.authenticate('google', { failureRedirect: '/login' })],
+      handler: (req, res) => {
+        // const user = req.user as UserModel;
 
-          // req.user = { id: user.id, token: createToken(user.id, '1 day'), username: user.username };
+        // req.user = { id: user.id, token: createToken(user.id, '1 day'), username: user.username };
 
-          res.status(200).redirect('/');
-        },
-      ],
+        res.status(200).redirect('/');
+      },
     },
   ],
 };

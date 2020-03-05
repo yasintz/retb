@@ -6,18 +6,16 @@ import UserModel from '@server/database/models/user.model';
 const localRoute: Route = {
   method: 'post',
   path: '/',
-  handlers: [
-    passport.authenticate('local'),
-    (req, res) => {
-      const user = req.user as UserModel;
-      res.json({
-        loggedIn: true,
-        id: user.id,
-        username: user.username,
-        token: createToken(user.id, '1 day'),
-      });
-    },
-  ],
+  middlewares: [passport.authenticate('local')],
+  handler: (req, res) => {
+    const user = req.user as UserModel;
+    res.json({
+      loggedIn: true,
+      id: user.id,
+      username: user.username,
+      token: createToken(user.id, '1 day'),
+    });
+  },
 };
 
 export default localRoute;
