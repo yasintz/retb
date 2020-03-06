@@ -1,4 +1,5 @@
 import bodyParser from 'body-parser';
+import { Connection } from 'typeorm';
 import cors from 'cors';
 import session from 'express-session';
 import express from 'express';
@@ -7,8 +8,8 @@ import route from '@server/route';
 import applyErrorHandlers from '@server/middleware/error-handler';
 import initDatabase from '@server/database';
 import ServerContext from '@server/context';
-import { Connection } from 'typeorm';
-import passportService from './services/passport.service';
+import passportService from '@server/services/passport.service';
+import socketHandler from '@server/socket';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -20,6 +21,8 @@ class App {
   express: express.Express;
 
   database: Promise<Connection>;
+
+  socketHandler = socketHandler;
 
   constructor() {
     this.createExpress();

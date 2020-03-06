@@ -31,6 +31,7 @@ export default class Document extends React.Component<DocumentProps & { styleTag
           {helmet.title.toComponent()}
           {helmet.meta.toComponent()}
           {helmet.link.toComponent()}
+          <script src="/socket.io/socket.io.js" />
           {styleTags}
           <AfterStyles />
         </head>

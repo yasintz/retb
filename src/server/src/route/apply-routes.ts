@@ -18,8 +18,7 @@ function applyRoutes(route: Route, router: express.Router): void {
     const newRouter = route.router;
     const middlewares = route.middlewares ? route.middlewares : [];
 
-    newRouter.use(middlewares);
-    router.use(route.path, newRouter);
+    router.use(route.path, ...middlewares, newRouter);
 
     route.routes.forEach(childRote => applyRoutes(childRote, newRouter));
 
@@ -51,7 +50,7 @@ function applyRoutes(route: Route, router: express.Router): void {
   }
 
   // eslint-disable-next-line no-console
-  console.error(`Routes is incorrect`);
+  console.error('Routes is incorrect');
   process.exit(1);
 }
 
