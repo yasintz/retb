@@ -18,13 +18,13 @@
 ## Install
 
 ```sh
-yarn install
+git clone https://github.com/yasintz/retb.git
 ```
 
-## Usage
+## Usage for development 
 
 ```sh
-yarn run start
+yarn install && yarn run dev 
 ```
 
 ## Run tests
@@ -32,6 +32,14 @@ yarn run start
 ```sh
 yarn run test
 ```
+
+## Usage for production 
+
+```sh
+yarn install && yarn run build && yarn run start 
+```
+
+
 
 ## Show your support
 
