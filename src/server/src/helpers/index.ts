@@ -10,14 +10,14 @@ export type ParentRoute = {
   routes: Route[];
 };
 
-export type ChildRoute = {
+export type HandlerRoute = {
   path: string | string[];
   method: 'get' | 'post' | 'put' | 'delete';
   middlewares?: Middleware[];
   handler: Handler;
 };
 
-export type Route = ChildRoute | ParentRoute;
+export type Route = HandlerRoute | ParentRoute;
 
 export class Service<R> {
   protected Repository: R;

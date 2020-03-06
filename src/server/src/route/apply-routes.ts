@@ -1,16 +1,16 @@
 import * as express from 'express';
-import { Route, ParentRoute, ChildRoute } from '@server/helpers';
+import { Route, ParentRoute, HandlerRoute } from '@server/helpers';
 
-function isParent(route: any): route is ParentRoute {
+function isParentRoute(route: any): route is ParentRoute {
   return route.routes;
 }
 
-function isChild(route: any): route is ChildRoute {
+function isHandlerRoute(route: any): route is HandlerRoute {
   return route.method && route.handler && route.path;
 }
 
 function applyRoutes(route: Route, router: express.Router): void {
-  if (isParent(route)) {
+  if (isParentRoute(route)) {
     let newRouter = router;
     const path = route.path ? route.path : '/';
     const middlewares = route.middlewares ? route.middlewares : [];
@@ -23,10 +23,9 @@ function applyRoutes(route: Route, router: express.Router): void {
 
     return;
   }
-  if (isChild(route)) {
+  if (isHandlerRoute(route)) {
     const { handler, method, path, middlewares } = route;
-    const handlerArray = Array.isArray(middlewares) ? [...middlewares, handler] : [handler];
-    const handlers = handlerArray.map(
+    const handlers = [...(middlewares || []), handler].map(
       item => async (req: express.Request, res: express.Response, next: express.NextFunction) => {
         try {
           await item(req, res, next);
