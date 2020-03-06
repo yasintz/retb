@@ -29,7 +29,7 @@ if (module.hot && process.env.NODE_ENV === 'development') {
   module.hot.accept(
     ['./server/src/index.ts', './server/src/socket/index.ts', './server/src/database/index.ts'],
     async files => {
-      console.log(files);
+      console.log(files.join('\n'));
       console.log('🔁  HMR Reloading `./server`...');
       try {
         if (files.find(item => (item as string).includes('database'))) {
