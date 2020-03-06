@@ -1,52 +1,11 @@
 import React from 'react';
-import axios from 'axios';
-import styled from 'styled-components';
 import { PageComponent } from '..';
 
 interface AppProps {}
 
-const Button = styled.button`
-  padding: 32px;
-  background-color: hotpink;
-  font-size: 24px;
-  border-radius: 4px;
-  font-weight: bold;
-  &:hover {
-    color: white;
-  }
-`;
-
 const App: PageComponent<AppProps> = props => {
-  console.log(props);
-
   return (
     <div>
-      <div>
-        <Button
-          onClick={() => {
-            axios.post('/auth/logout').then(({ data }) => {
-              console.log(data);
-            });
-          }}
-        >
-          logout
-        </Button>
-      </div>
-      <button
-        type="button"
-        onClick={() => {
-          axios
-            .get('/api/test')
-            .then(({ data }) => {
-              console.log({ data });
-            })
-            .catch(err => {
-              console.log(err);
-            });
-        }}
-      >
-        Getir
-      </button>
       <div>
         <a href="/auth/login/google"> Login With Google</a>
       </div>
@@ -55,8 +14,7 @@ const App: PageComponent<AppProps> = props => {
 };
 
 App.getInitialProps = ({ req }) => {
-  // @ts-ignore
-  return { user: req?.user };
+  return {};
 };
 
 export default App;

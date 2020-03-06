@@ -2,18 +2,16 @@ import React from 'react';
 import axios from 'axios';
 import { PageComponent } from '..';
 
-interface LoginPageProps {
-  user?: { username: string; id: string; token: string };
-}
+interface LoginPageProps {}
+
 const Login: PageComponent<LoginPageProps> = props => {
-  const [user, setUser] = React.useState(props.user ? props.user : { username: 'yok la', token: '' });
+  const [user, setUser] = React.useState({ username: 'yok la', token: '' });
   const buttons = [
     {
       text: 'Login',
       onClick: () => {
         axios.post('/auth/login', { username: 'yasintz', password: '12345' }).then(i => {
           setUser(i.data);
-          console.log(i.data);
         });
       },
     },
@@ -48,9 +46,9 @@ const Login: PageComponent<LoginPageProps> = props => {
     </>
   );
 };
+
 Login.getInitialProps = ({ req }) => {
-  // @ts-ignore
-  return { user: req?.user };
+  return {};
 };
 
 export default Login;

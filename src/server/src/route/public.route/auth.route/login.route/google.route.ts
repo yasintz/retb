@@ -1,7 +1,7 @@
 import { Route } from '@server/helpers';
 import passport from 'passport';
-import { createToken } from '@server/utils/token.util';
-import UserModel from '@server/database/models/user.model';
+// import { createToken } from '@server/utils/token.util';
+// import UserModel from '@server/database/models/user.model';
 
 const googleRoute: Route = {
   routes: [

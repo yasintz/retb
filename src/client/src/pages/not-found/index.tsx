@@ -6,8 +6,6 @@ const NotFound: PageComponent = () => {
 };
 
 NotFound.getInitialProps = ({ req, res }) => {
-  console.log({ req, res });
-
   return {};
 };
 
