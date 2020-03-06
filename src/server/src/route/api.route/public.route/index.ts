@@ -1,9 +1,8 @@
 import { Route } from '@server/helpers';
-import clientRoute from './client.route';
 import authRoute from './auth.route';
 
 const publicRoute: Route = {
-  routes: [authRoute, clientRoute],
+  extenders: [authRoute],
 };
 
 export default publicRoute;

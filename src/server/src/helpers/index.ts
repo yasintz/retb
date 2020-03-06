@@ -4,10 +4,15 @@ export type Handler = (req: express.Request, res: express.Response, next: expres
 
 export type Middleware = Handler;
 
-export type ParentRoute = {
-  path?: string | string[];
+export type Controller = {
+  path: string;
+  router: express.Router;
   middlewares?: Middleware[];
   routes: Route[];
+};
+
+export type ExtenderController = {
+  extenders: Route[];
 };
 
 export type HandlerRoute = {
@@ -17,7 +22,7 @@ export type HandlerRoute = {
   handler: Handler;
 };
 
-export type Route = HandlerRoute | ParentRoute;
+export type Route = HandlerRoute | ExtenderController | Controller;
 
 export class Service<R> {
   protected Repository: R;

@@ -1,8 +1,12 @@
 import * as express from 'express';
-import { Route, ParentRoute, HandlerRoute } from '@server/helpers';
+import { Route, Controller, HandlerRoute, ExtenderController } from '@server/helpers';
 
-function isParentRoute(route: any): route is ParentRoute {
-  return route.routes;
+function isController(route: any): route is Controller {
+  return route.routes && route.router && route.path;
+}
+
+function isExtender(route: any): route is ExtenderController {
+  return route.extenders;
 }
 
 function isHandlerRoute(route: any): route is HandlerRoute {
@@ -10,19 +14,24 @@ function isHandlerRoute(route: any): route is HandlerRoute {
 }
 
 function applyRoutes(route: Route, router: express.Router): void {
-  if (isParentRoute(route)) {
-    let newRouter = router;
-    const path = route.path ? route.path : '/';
+  if (isController(route)) {
+    const newRouter = route.router;
     const middlewares = route.middlewares ? route.middlewares : [];
-    if ((middlewares && middlewares.length) || (path && path !== '/')) {
-      newRouter = express.Router();
-      router.use(path, ...middlewares, newRouter);
-    }
+
+    newRouter.use(middlewares);
+    router.use(route.path, newRouter);
 
     route.routes.forEach(childRote => applyRoutes(childRote, newRouter));
 
     return;
   }
+
+  if (isExtender(route)) {
+    route.extenders.forEach(childRote => applyRoutes(childRote, router));
+
+    return;
+  }
+
   if (isHandlerRoute(route)) {
     const { handler, method, path, middlewares } = route;
     const handlers = [...(middlewares || []), handler].map(

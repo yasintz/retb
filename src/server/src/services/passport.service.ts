@@ -94,7 +94,7 @@ class PassportService {
       {
         clientID: ServerContext.GOOGLE_CLIENT_ID,
         clientSecret: ServerContext.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${ServerContext.SERVER_URL}/auth/login/google/callback`,
+        callbackURL: `${ServerContext.SERVER_URL}/api/auth/login/google/callback`,
       },
       (token, tokenSecret, profile, done) => {
         process.nextTick(async () => {
@@ -127,7 +127,7 @@ class PassportService {
       {
         clientID: ServerContext.GITHUB_CLIENT_ID,
         clientSecret: ServerContext.GITHUB_CLIENT_SECRET,
-        callbackURL: `${ServerContext.SERVER_URL}/auth/login/github/callback`,
+        callbackURL: `${ServerContext.SERVER_URL}/api/auth/login/github/callback`,
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, { accessToken, refreshToken, profile, id: 'dcbc888b-1983-4cb6-8030-c369fccd6456' });

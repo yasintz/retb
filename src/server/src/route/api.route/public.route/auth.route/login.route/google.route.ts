@@ -1,19 +1,22 @@
+import * as express from 'express';
 import { Route } from '@server/helpers';
 import passport from 'passport';
 // import { createToken } from '@server/utils/token.util';
 // import UserModel from '@server/database/models/user.model';
 
 const googleRoute: Route = {
+  path: '/google',
+  router: express.Router(),
   routes: [
     {
-      path: '/google',
+      path: '/',
       method: 'get',
       handler: passport.authenticate('google', {
         scope: ['profile', 'email'],
       }),
     },
     {
-      path: '/google/callback',
+      path: '/callback',
       method: 'get',
       middlewares: [passport.authenticate('google', { failureRedirect: '/login' })],
       handler: (req, res) => {

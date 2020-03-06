@@ -9,6 +9,7 @@ import initDatabase from '@server/database';
 import ServerContext from '@server/context';
 import { Connection } from 'typeorm';
 import passportService from './services/passport.service';
+import { rateLimiterUsingThirdParty } from './middleware/rate-limiter.middleware';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -24,8 +25,8 @@ class App {
   constructor() {
     this.createExpress();
     this.connectToDatabase();
-    passportService.useAll();
     this.loadExpressConfiguration();
+    passportService.useAll();
     this.applyRoutes();
     this.applyErrorHandler();
   }

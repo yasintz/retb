@@ -1,20 +1,14 @@
+import * as express from 'express';
 import { Route } from '@server/helpers';
-import { HTTP404Error } from '@server/helpers/http-errors';
-import { authenticationMiddleware } from '@server/middleware';
-import testRoute from './test.route';
-
-const notFoundError: Route = {
-  path: '*',
-  method: 'get',
-  handler: (req, res) => {
-    throw new HTTP404Error('Not Found');
-  },
-};
+import { rateLimiterUsingThirdParty } from '@server/middleware/rate-limiter.middleware';
+import secretRoute from './secret.route';
+import publicRoute from './public.route';
 
 const apiRoute: Route = {
   path: '/api',
-  routes: [testRoute, notFoundError],
-  middlewares: [authenticationMiddleware],
+  router: express.Router(),
+  middlewares: [rateLimiterUsingThirdParty],
+  routes: [publicRoute, secretRoute],
 };
 
 export default apiRoute;
