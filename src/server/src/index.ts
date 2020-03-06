@@ -9,7 +9,6 @@ import initDatabase from '@server/database';
 import ServerContext from '@server/context';
 import { Connection } from 'typeorm';
 import passportService from './services/passport.service';
-import { rateLimiterUsingThirdParty } from './middleware/rate-limiter.middleware';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
