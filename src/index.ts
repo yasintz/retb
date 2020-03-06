@@ -14,37 +14,41 @@ const server = http.createServer(expressApp);
 const socketServer = createSocketServer(server);
 
 let app = require('@server').default;
+let socketHandler = require('@server/socket').default;
+let database = require('@server/database').default();
 
 expressApp.use((req, res) => app.express.handle(req, res));
 
-socketServer.on('connection', socket => app.socketHandler(socket));
+socketServer.on('connection', socket => socketHandler(socket));
 
 server.listen(port, () => {
   console.log(`> Started on port ${port}`);
 });
 
-if (process.env.NODE_ENV === 'development') {
-  let database = app.database;
-  if (module.hot) {
-    module.hot.accept(['./server/src'], files => {
+if (module.hot && process.env.NODE_ENV === 'development') {
+  module.hot.accept(
+    ['./server/src/index.ts', './server/src/socket/index.ts', './server/src/database/index.ts'],
+    async files => {
       console.log(files);
       console.log('🔁  HMR Reloading `./server`...');
       try {
-        database = database.then((connection: any) => {
+        if (files.find(item => (item as string).includes('database'))) {
+          const dbConnection = await database;
           console.log('Closing Database Connection');
-
-          return connection.close().then(() => {
-            console.log('Closed Database Connection');
-            app = require('@server').default;
-
-            return app.database;
-          });
-        });
+          await dbConnection.close();
+          console.log('Closed Database Connection');
+          app = require('@server').default;
+          socketHandler = require('@server/socket').default;
+          database = require('@server/database').default();
+        } else {
+          app = require('@server').default;
+          socketHandler = require('@server/socket').default;
+        }
       } catch (error) {
         console.error(error);
       }
-    });
+    },
+  );
 
-    console.info('✅  Server-side HMR Enabled!');
-  }
+  console.info('✅  Server-side HMR Enabled!');
 }

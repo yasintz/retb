@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 
 function onConnect(socket: Socket) {
-  console.log('Connection a user a');
+  console.log('Connection a user :)');
   socket.on('disconnect', () => {
     console.log('Disconnect a user');
   });

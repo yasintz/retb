@@ -1,15 +1,12 @@
 import bodyParser from 'body-parser';
-import { Connection } from 'typeorm';
 import cors from 'cors';
 import session from 'express-session';
 import express from 'express';
 import passport from 'passport';
 import route from '@server/route';
 import applyErrorHandlers from '@server/middleware/error-handler';
-import initDatabase from '@server/database';
 import ServerContext from '@server/context';
 import passportService from '@server/services/passport.service';
-import socketHandler from '@server/socket';
 
 const corsOptions: cors.CorsOptions = {
   origin: (origin, callback) => {
@@ -20,13 +17,8 @@ const corsOptions: cors.CorsOptions = {
 class App {
   express: express.Express;
 
-  database: Promise<Connection>;
-
-  socketHandler = socketHandler;
-
   constructor() {
     this.createExpress();
-    this.connectToDatabase();
     this.loadExpressConfiguration();
     passportService.useAll();
     this.applyRoutes();
@@ -35,14 +27,6 @@ class App {
 
   private createExpress = () => {
     this.express = express();
-  };
-
-  private connectToDatabase = () => {
-    console.log('Connecting Database'); // eslint-disable-line no-console
-    this.database = initDatabase();
-    this.database.then(() => {
-      console.log('Connected Database'); // eslint-disable-line no-console
-    });
   };
 
   private loadExpressConfiguration = () => {
