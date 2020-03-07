@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import ServerContext from '@server/context';
 import { createConnection } from 'typeorm';
 import Models from './models';
 
@@ -7,7 +8,7 @@ function initDatabase() {
 
   return createConnection({
     type: 'postgres',
-    url: process.env.DATABASE_URL,
+    url: ServerContext.Config.DATABASE_URL,
     entities: Object.values(Models),
     synchronize: true,
   })

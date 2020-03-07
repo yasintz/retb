@@ -57,7 +57,7 @@ class PassportService {
 
   private createJwtStrategy = () => {
     this._jwtStrategy = new JwtStrategy(
-      { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: ServerContext.TOKEN_SECRET_KEY },
+      { jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(), secretOrKey: ServerContext.Config.TOKEN_SECRET_KEY },
       (jwtPayload, done) => {
         process.nextTick(async () => {
           const { userId } = jwtPayload;
@@ -92,9 +92,9 @@ class PassportService {
   private createGoogleStrategy = () => {
     this._googleStrategy = new GoogleStrategy(
       {
-        clientID: ServerContext.GOOGLE_CLIENT_ID,
-        clientSecret: ServerContext.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${ServerContext.SERVER_URL}/api/auth/login/google/callback`,
+        clientID: ServerContext.Config.GOOGLE_CLIENT_ID,
+        clientSecret: ServerContext.Config.GOOGLE_CLIENT_SECRET,
+        callbackURL: `${ServerContext.Config.SERVER_URL}${ServerContext.Config.GOOGLE_CALLBACK_URL}`,
       },
       (token, tokenSecret, profile, done) => {
         process.nextTick(async () => {
@@ -125,9 +125,9 @@ class PassportService {
   private createGithubStrategy = () => {
     this._githubStrategy = new GithubStrategy(
       {
-        clientID: ServerContext.GITHUB_CLIENT_ID,
-        clientSecret: ServerContext.GITHUB_CLIENT_SECRET,
-        callbackURL: `${ServerContext.SERVER_URL}/api/auth/login/github/callback`,
+        clientID: ServerContext.Config.GITHUB_CLIENT_ID,
+        clientSecret: ServerContext.Config.GITHUB_CLIENT_SECRET,
+        callbackURL: `${ServerContext.Config.SERVER_URL}${ServerContext.Config.GITHUB_CALLBACK_ROUTE}`,
       },
       (accessToken, refreshToken, profile, done) => {
         done(null, { accessToken, refreshToken, profile, id: 'dcbc888b-1983-4cb6-8030-c369fccd6456' });

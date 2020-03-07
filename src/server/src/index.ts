@@ -39,7 +39,7 @@ class App {
       .use(cors(corsOptions))
       .use(
         session({
-          secret: ServerContext.SESSION_SECRET_KEY,
+          secret: ServerContext.Config.SESSION_SECRET_KEY,
           cookie: { maxAge: 60000 },
           resave: false,
           saveUninitialized: false,
