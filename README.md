@@ -3,7 +3,7 @@
   <img alt="Version" src="https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000" />
   <img src="https://img.shields.io/badge/node-12.14.1-blue.svg" />
   <img src="https://img.shields.io/badge/yarn-1.21.1-blue.svg" />
-  <img src="https://img.shields.io/badge/posgresql-12.2.0-blue.svg" />
+  <img src="https://img.shields.io/badge/PosgreSQL-12.2.0-blue.svg" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
   </a>
@@ -15,7 +15,7 @@
 
 - node 12.14.1
 - yarn 1.21.1
-- postgresql 12.2
+- PostgreSQL 12.2
 
 # Environment Variables
 
