@@ -94,7 +94,7 @@ class PassportService {
       {
         clientID: ServerContext.Config.GOOGLE_CLIENT_ID,
         clientSecret: ServerContext.Config.GOOGLE_CLIENT_SECRET,
-        callbackURL: `${ServerContext.Config.SERVER_URL}${ServerContext.Config.GOOGLE_CALLBACK_URL}`,
+        callbackURL: `${ServerContext.Config.SERVER_URL}${ServerContext.Config.GOOGLE_CALLBACK_ROUTE}`,
       },
       (token, tokenSecret, profile, done) => {
         process.nextTick(async () => {
